@@ -241,7 +241,7 @@ model = Model(inputs=[input_demand, input_aux]+[X_in1]+G11+[X_in2]+G22+[X_in3]+G
 model.compile(loss='mse',
               optimizer='adam',
               metrics=[rmse],
-              loss_weights=[1, 1, 10, 20, 20])
+              loss_weights=[1, 5, 10, 20, 20])
 
 print(model.summary())
 # plot_model(model, to_file='model.png')
@@ -249,7 +249,7 @@ print(model.summary())
 history = model.fit([demandX_train, factor_train]+graph1+graph2+graph3,
                     [demandY_train, supplyY_train, factor_train, demand_aux_train, supply_aux_train],
                     batch_size=8,
-                    epochs=150,
+                    epochs=160,
                     verbose=2,
                     validation_data=([demandX_test, factor_test]+graph1t+graph2t+graph3t,
                                      [demandY_test, supplyY_test, factor_test, demand_aux_test, supply_aux_test]))
