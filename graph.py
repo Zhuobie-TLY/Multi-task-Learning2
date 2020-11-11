@@ -25,7 +25,6 @@ def Bian(B):
                 B[i][j] = 1/B[i][j]
             else:
                 B[i][j] = 0
-    print('123124123')
     min_max_scaler = preprocessing.MinMaxScaler()
     B = min_max_scaler.fit_transform(B)
     BB = []
@@ -34,44 +33,44 @@ def Bian(B):
             #上
             if B[i*16+j][0] > 0:
                 BB.append((i*16+j+1, i*16+j+16+1, B[i*16+j][0]))
-                print((i*16+j+1, i*16+j+16+1, B[i*16+j][0]))
+                #print((i*16+j+1, i*16+j+16+1, B[i*16+j][0]))
             else:
                 print('1')
             #下
             if B[i*16+j][1] > 0:
                 BB.append((i * 16 + j + 1, i * 16 + j+1-16, B[i * 16 + j][1]))
-                print((i * 16 + j + 1, i * 16 + j + 1-16, B[i * 16 + j][1]))
+                #print((i * 16 + j + 1, i * 16 + j + 1-16, B[i * 16 + j][1]))
             else:
                 print('2')
             #左
             if B[i*16+j][2] > 0:
                 BB.append((i * 16 + j + 1, i * 16 + j, B[i * 16 + j][2]))
-                print((i * 16 + j + 1, i * 16 + j, B[i * 16 + j][2]))
+                #print((i * 16 + j + 1, i * 16 + j, B[i * 16 + j][2]))
             else:
                 print('3')
             #右
             if B[i*16+j][3] > 0:
                 BB.append((i * 16 + j + 1, i * 16 + j + 2, B[i * 16 + j][3]))
-                print((i * 16 + j + 1, i * 16 + j + 2, B[i * 16 + j][3]))
+                #print((i * 16 + j + 1, i * 16 + j + 2, B[i * 16 + j][3]))
             else:
                 print('4')
-    print(BB)
-    print(len(BB))
+    #print(BB)
+    #print(len(BB))
     return BB
 #高峰时间
 BB1 = []
 BB1 = Bian(B1)[:]
-print(len(BB1))
+#print(len(BB1))
 #平峰时间
 BB2 = []
 BB2 = Bian(B2)[:]
-print(BB2)
-print(len(BB2))
+#print(BB2)
+#print(len(BB2))
 #graph类构造
 P = []
 for i in range(256):
    P.append(i+1)
-print(P)
+#print(P)
 G1 = nx.DiGraph()
 G1.add_nodes_from(P)
 G1.add_weighted_edges_from(BB1)
