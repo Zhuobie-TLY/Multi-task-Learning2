@@ -168,27 +168,27 @@ G33 = [Input(batch_shape=(None, 256, 256), sparse=False) for _ in range(support)
 #1
 X_in1 = Input(shape=(supplyX_train1.shape[1], 1))#[None, 256, 1]# Define model architecture# NOTE: We pass arguments for graph convolutional layers as a list of tensors.
 H1 = Dropout(rate=0.5)(X_in1)#修改相乘的维度，此处变为[N, N]*[?, N, N]#自定义层，将[(1536, 3, 256, 1), (1536, 3, 256, 256), (1536, 3, 256, 256), (1536, 3, 256, 256) ]#每个list调整维度，变为#concentrate函数转变为(A1, A2, A3)tuple类型其中A为((1536, 256, 1), (1536, 256, 256),(1536, 256, 256))
-Y1 = GraphConvolution(1, support, activation='relu',
+H1 = GraphConvolution(8, support, activation='relu',
                      kernel_regularizer=l2(5e-4))([H1]+G11)
-#H1 = Dropout(rate=0.5)(H1)
-#Y1 = GraphConvolution(1, support, activation='relu')([H1]+G11)#[None, 256, 1]new[None, None, 256, 1]
+H1 = Dropout(rate=0.5)(H1)
+Y1 = GraphConvolution(1, support, activation='relu')([H1]+G11)#[None, 256, 1]new[None, None, 256, 1]
 
 #2
 X_in2 = Input(shape=(supplyX_train2.shape[1], 1))#[None, 256, 1]# Define model architecture# NOTE: We pass arguments for graph convolutional layers as a list of tensors.
 H2 = Dropout(rate=0.5)(X_in2)#修改相乘的维度，此处变为[N, N]*[?, N, N]#自定义层，将[(1536, 3, 256, 1), (1536, 3, 256, 256), (1536, 3, 256, 256), (1536, 3, 256, 256) ]#每个list调整维度，变为#concentrate函数转变为(A1, A2, A3)tuple类型其中A为((1536, 256, 1), (1536, 256, 256),(1536, 256, 256))
-Y2 = GraphConvolution(1, support, activation='relu',
+H2 = GraphConvolution(8, support, activation='relu',
                      kernel_regularizer=l2(5e-4))([H2]+G22)
-#H2 = Dropout(rate=0.5)(H2)
-#Y2 = GraphConvolution(1, support, activation='relu')([H2]+G22)#[None, 256, 1]new[None, None, 256, 1]
+H2 = Dropout(rate=0.5)(H2)
+Y2 = GraphConvolution(1, support, activation='relu')([H2]+G22)#[None, 256, 1]new[None, None, 256, 1]
 
 
 #3
 X_in3 = Input(shape=(supplyX_train3.shape[1], 1))#[None, 256, 1]# Define model architecture# NOTE: We pass arguments for graph convolutional layers as a list of tensors.
 H3 = Dropout(rate=0.5)(X_in3)#修改相乘的维度，此处变为[N, N]*[?, N, N]#自定义层，将[(1536, 3, 256, 1), (1536, 3, 256, 256), (1536, 3, 256, 256), (1536, 3, 256, 256) ]#每个list调整维度，变为#concentrate函数转变为(A1, A2, A3)tuple类型其中A为((1536, 256, 1), (1536, 256, 256),(1536, 256, 256))
-Y3 = GraphConvolution(1, support, activation='relu',
+H3 = GraphConvolution(8, support, activation='relu',
                      kernel_regularizer=l2(5e-4))([H3]+G33)
-#H3 = Dropout(rate=0.5)(H3)
-#Y3 = GraphConvolution(1, support, activation='relu')([H3]+G33)#[None, 256, 1]new[None, None, 256, 1]
+H3 = Dropout(rate=0.5)(H3)
+Y3 = GraphConvolution(1, support, activation='relu')([H3]+G33)#[None, 256, 1]new[None, None, 256, 1]
 
 #三个合起来
 Y = concatenate([Y1, Y2, Y3], axis=-1)
@@ -249,7 +249,7 @@ print(model.summary())
 history = model.fit([demandX_train, factor_train]+graph1+graph2+graph3,
                     [demandY_train, supplyY_train, factor_train, demand_aux_train, supply_aux_train],
                     batch_size=8,
-                    epochs=120,
+                    epochs=150,
                     verbose=2,
                     validation_data=([demandX_test, factor_test]+graph1t+graph2t+graph3t,
                                      [demandY_test, supplyY_test, factor_test, demand_aux_test, supply_aux_test]))
