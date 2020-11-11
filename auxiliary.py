@@ -6,7 +6,7 @@ supply = data[:, :, :, 1:2]
 
 def classify(ori):
     classified = np.zeros(ori.shape)
-    avg = 8
+    avg = 16
     for i in range(2880):
         for j in range(16):
             for k in range(16):
