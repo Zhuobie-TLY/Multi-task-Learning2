@@ -248,7 +248,7 @@ print(model.summary())
 history = model.fit([demandX_train, factor_train]+graph1+graph2+graph3,
                     [demandY_train, supplyY_train, factor_train, demand_aux_train, supply_aux_train],
                     batch_size=8,
-                    epochs=100,
+                    epochs=120,
                     verbose=2,
                     validation_data=([demandX_test, factor_test]+graph1t+graph2t+graph3t,
                                      [demandY_test, supplyY_test, factor_test, demand_aux_test, supply_aux_test]))
