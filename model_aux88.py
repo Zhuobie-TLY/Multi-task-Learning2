@@ -33,8 +33,6 @@ def Graphplus(x, T_kk1, T_kk2):
     GCN1 = np.array(GCN1)
     GCN2 = np.array(GCN2)
     GCN3 = np.array(GCN3)
-    print(x.shape)
-    print(GCN1.shape)
     graph = [x, GCN1, GCN2, GCN3]
     return graph
 
@@ -168,7 +166,7 @@ G33 = [Input(batch_shape=(None, 256, 256), sparse=False) for _ in range(support)
 #1
 X_in1 = Input(shape=(supplyX_train1.shape[1], 1))#[None, 256, 1]# Define model architecture# NOTE: We pass arguments for graph convolutional layers as a list of tensors.
 H1 = Dropout(rate=0.5)(X_in1)#修改相乘的维度，此处变为[N, N]*[?, N, N]#自定义层，将[(1536, 3, 256, 1), (1536, 3, 256, 256), (1536, 3, 256, 256), (1536, 3, 256, 256) ]#每个list调整维度，变为#concentrate函数转变为(A1, A2, A3)tuple类型其中A为((1536, 256, 1), (1536, 256, 256),(1536, 256, 256))
-H1 = GraphConvolution(8, support, activation='relu',
+H1 = GraphConvolution(1, support, activation='relu',
                      kernel_regularizer=l2(5e-4))([H1]+G11)
 H1 = Dropout(rate=0.5)(H1)
 Y1 = GraphConvolution(1, support, activation='relu')([H1]+G11)#[None, 256, 1]new[None, None, 256, 1]
@@ -176,7 +174,7 @@ Y1 = GraphConvolution(1, support, activation='relu')([H1]+G11)#[None, 256, 1]new
 #2
 X_in2 = Input(shape=(supplyX_train2.shape[1], 1))#[None, 256, 1]# Define model architecture# NOTE: We pass arguments for graph convolutional layers as a list of tensors.
 H2 = Dropout(rate=0.5)(X_in2)#修改相乘的维度，此处变为[N, N]*[?, N, N]#自定义层，将[(1536, 3, 256, 1), (1536, 3, 256, 256), (1536, 3, 256, 256), (1536, 3, 256, 256) ]#每个list调整维度，变为#concentrate函数转变为(A1, A2, A3)tuple类型其中A为((1536, 256, 1), (1536, 256, 256),(1536, 256, 256))
-H2 = GraphConvolution(8, support, activation='relu',
+H2 = GraphConvolution(1, support, activation='relu',
                      kernel_regularizer=l2(5e-4))([H2]+G22)
 H2 = Dropout(rate=0.5)(H2)
 Y2 = GraphConvolution(1, support, activation='relu')([H2]+G22)#[None, 256, 1]new[None, None, 256, 1]
@@ -185,7 +183,7 @@ Y2 = GraphConvolution(1, support, activation='relu')([H2]+G22)#[None, 256, 1]new
 #3
 X_in3 = Input(shape=(supplyX_train3.shape[1], 1))#[None, 256, 1]# Define model architecture# NOTE: We pass arguments for graph convolutional layers as a list of tensors.
 H3 = Dropout(rate=0.5)(X_in3)#修改相乘的维度，此处变为[N, N]*[?, N, N]#自定义层，将[(1536, 3, 256, 1), (1536, 3, 256, 256), (1536, 3, 256, 256), (1536, 3, 256, 256) ]#每个list调整维度，变为#concentrate函数转变为(A1, A2, A3)tuple类型其中A为((1536, 256, 1), (1536, 256, 256),(1536, 256, 256))
-H3 = GraphConvolution(8, support, activation='relu',
+H3 = GraphConvolution(1, support, activation='relu',
                      kernel_regularizer=l2(5e-4))([H3]+G33)
 H3 = Dropout(rate=0.5)(H3)
 Y3 = GraphConvolution(1, support, activation='relu')([H3]+G33)#[None, 256, 1]new[None, None, 256, 1]
@@ -241,7 +239,7 @@ model = Model(inputs=[input_demand, input_aux]+[X_in1]+G11+[X_in2]+G22+[X_in3]+G
 model.compile(loss='mse',
               optimizer='adam',
               metrics=[rmse],
-              loss_weights=[1, 5, 10, 20, 20])
+              loss_weights=[1, 1.2, 10, 20, 20])
 
 print(model.summary())
 # plot_model(model, to_file='model.png')
