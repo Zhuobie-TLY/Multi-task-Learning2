@@ -239,7 +239,7 @@ model = Model(inputs=[input_demand, input_aux]+[X_in1]+G11+[X_in2]+G22+[X_in3]+G
 model.compile(loss='mse',
               optimizer='adam',
               metrics=[rmse],
-              loss_weights=[1, 1.3, 10, 20, 20])
+              loss_weights=[1, 1.5, 10, 20, 20])
 
 print(model.summary())
 # plot_model(model, to_file='model.png')
